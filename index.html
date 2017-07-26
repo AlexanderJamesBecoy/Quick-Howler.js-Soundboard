@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>GameJam</title>
+        <script src="libs/jquery-3.2.1.min.js"></script>
+        <script src="libs/pixi.min.js"></script>
+        <script src="libs/howler.min.js"></script>
+    </head>
+    <body>
+    <div></div>
+    </body>
+    <script>
+    
+    var config = {
+        'resolution': {'width': 640, 'height': 480},
+        backgroundColor: 0xEEEEEE
+    };
+        
+    // Aliases
+    var Container = PIXI.Container,
+        autoDetectRenderer = PIXI.autoDetectRenderer,
+        loader = PIXI.loader,
+        resources = PIXI.loader.resources,
+        Graphics = PIXI.Graphics,
+        Text = PIXI.Text;
+        TextureCache = PIXI.utils.TextureCache,
+        Texture = PIXI.Texture,
+        Sprite = PIXI.Sprite;
+        
+    // Create a Pixi stage and renderer
+    var stage = new Container(),
+        renderer = autoDetectRenderer(config.resolution.width, config.resolution.width);
+    renderer.backgroundColor = config.backgroundColor;
+    document.body.appendChild(renderer.view);
+    
+    // Load assets
+    loader
+        .add("assets/cat.png")
+        .load(setup);
+    
+    // Temp
+    const makeImageButton = (text, audio, x, y)  => {
+        var rectangle = new Graphics();
+        rectangle.lineStyle(4, 0xFF3300, 1);
+        rectangle.beginFill(0x66CCFF);
+        rectangle.drawRect(0, 0, 64, 64);
+        rectangle.endFill();
+        var message = new Text( text, {fontFamily: "Arial", fontSize: 10, fill: "white"});
+        message.anchor.set(0.5, 0.5);
+        message.position.set(32, 32);
+        var button = new Container();
+        button.addChild(rectangle);
+        button.addChild(message);
+        
+        const sound = new Howl({
+           src: audio 
+        });
+        button.interactive = true;
+        button.on('pointerdown', event => sound.play());
+        window.stage.addChild(button);
+        button.x = x;
+        button.y = y;
+        return button;
+    };
+        
+    const makeImageButtonLonger_FadeIn = (text, audio, x, y) => {
+        var rectangle = new Graphics();
+        rectangle.lineStyle(4, 0xFF3300, 1);
+        rectangle.beginFill(0x66CCFF);
+        rectangle.drawRect(0, 0, 128, 64);
+        rectangle.endFill();
+        var message = new Text( text, {fontFamily: "Arial", fontSize: 10, fill: "white"});
+        message.anchor.set(0.5, 0.5);
+        message.position.set(64, 32);
+        var button = new Container();
+        button.addChild(rectangle);
+        button.addChild(message);
+        
+        const sound = new Howl({
+           src: audio 
+        });
+        button.interactive = true;
+        button.on('pointerdown', event => sound.fade(0, 1, 5000, sound.play()));
+        window.stage.addChild(button);
+        button.x = x;
+        button.y = y;
+        return button;
+    };
+    
+    // Setup Function
+    function setup() {
+        
+        // @TODO -- Make buttons
+        makeImageButton('Background \n music','assets/soundtracks/01_2-bass_edition.wav', 16, 16);
+        makeImageButton('Breath 1', 'assets/sounds/breath.wav', 96, 16);
+        makeImageButton('Breath 2', 'assets/sounds/breath_2.wav', 176, 16);
+        makeImageButton('Breath 3', 'assets/sounds/breath_3.wav', 256, 16);
+        makeImageButton('Breath 4', 'assets/sounds/breath_4.wav', 336, 16);
+        makeImageButton('Breath 5', 'assets/sounds/breath_5.wav', 416, 16);
+        makeImageButton('Breath 6', 'assets/sounds/breath_6.wav', 496, 16);
+        
+        makeImageButton('creaky-door','assets/sounds/creaky-door.wav', 16, 96);
+        makeImageButton('creaky-door \n open', 'assets/sounds/creaky-door_open.wav', 96, 96);
+        makeImageButton('Knock 1', 'assets/sounds/creepy-knocking-noise.wav', 176, 96);
+        makeImageButton('Knock 2', 'assets/sounds/creepy-knocking-noise_2.wav', 256, 96);
+        makeImageButton('Knock 3', 'assets/sounds/creepy-knocking-noise_3.wav', 336, 96);
+        makeImageButton('Knock 4', 'assets/sounds/creepy-knocking-noise_4.wav', 416, 96);
+        makeImageButton('crickets', 'assets/sounds/crickets.wav', 496, 96);
+        
+        makeImageButton('Deep breath', 'assets/sounds/deep-breath.wav', 16, 176);
+        makeImageButton('Floorboard \n creak', 'assets/sounds/floorboard-creak.wav', 96, 176);
+        makeImageButton('Laughing', 'assets/sounds/laughing.wav', 176, 176);
+        makeImageButton('Spider call', 'assets/sounds/spider-call.wav', 256, 176);
+        makeImageButton('Spider crunch', 'assets/sounds/spider-crunch.wav', 336, 176);
+        makeImageButton('Wolf', 'assets/sounds/wolf.wav', 416, 176);
+        
+        makeImageButtonLonger_FadeIn('Background music \n fading in', 'assets/soundtracks/01_2-bass_edition.wav', 16, 256);
+        
+        renderer.render(stage);
+        
+        
+    }
+        
+    /*
+    ========================================================
+    A possible method for loading multiple sounds
+    ========================================================
+    var btns = new Howl({
+      urls: ['http://www.javascriptoo.com/application/html/btn.wav'],
+      sprite: {
+        btn1: [0, 1000],
+        btn2: [2000, 3000],
+        btn3: [4000, 5000]
+      }
+    });
+    */
+        
+    /*
+    ========================================================
+    Another possible method for loading multiple sounds
+    ========================================================
+    var btn1 = new Howl({
+      urls: ['http://www.javascriptoo.com/application/html/btn1.wav']
+    });
+    document.getElementById('btn1').onclick = function(){
+      btn1.play();
+    };
+
+    var btn2 = new Howl({
+      urls: ['http://www.javascriptoo.com/application/html/btn2.wav']
+    });
+    document.getElementById('btn2').onclick = function(){
+      btn2.play();
+    };
+
+    var btn3 = new Howl({
+      urls: ['http://www.javascriptoo.com/application/html/btn3.wav']
+    });
+    document.getElementById('btn3').onclick = function(){
+      btn3.play();
+    };
+    */
+        
+    </script>
+</html>
